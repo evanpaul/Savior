@@ -89,10 +89,16 @@ def get_subreddits():
 
     if response.status_code == 200:
         data = response.json()["data"]
+        sorted_subs = []
+        # Collect and sort subreddit names
+        for subreddit in data["children"]:
+            sorted_subs.append(subreddit["data"]["display_name"])
+        sorted_subs.sort()
 
+        # Write subreddit names to file
         with open("subreddits.txt", "w") as f:
-            for subreddit in data["children"]:
-                f.write(subreddit["data"]["display_name"] + "\n")
+            for subreddit in sorted_subs:
+                f.write(subreddit + "\n")
         print("[!] Recorded %d subreddits to subreddits.txt" %
               len(data["children"]))
         print("[!] Add categories after each subreddit before sorting. Subreddits without categories will be ignored!")
